@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import Greeting from './greeting'
 import { fetchQuery } from 'convex/nextjs'
 import { api } from '../../../convex/_generated/api'
+import Overview from './overview'
 
 export default async function Home() {
   const user = await currentUser()
@@ -50,6 +51,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
+      <Overview coupleId={current?.couple._id!} />
     </div>
   )
 }

@@ -17,6 +17,7 @@ import type {
 import type * as category from "../category.js";
 import type * as couple_mutations from "../couple/mutations.js";
 import type * as couple_queries from "../couple/queries.js";
+import type * as reports from "../reports.js";
 import type * as transaction from "../transaction.js";
 import type * as user from "../user.js";
 
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   category: typeof category;
   "couple/mutations": typeof couple_mutations;
   "couple/queries": typeof couple_queries;
+  reports: typeof reports;
   transaction: typeof transaction;
   user: typeof user;
 }>;
