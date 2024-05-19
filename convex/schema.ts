@@ -8,7 +8,7 @@ export default defineSchema({
   }),
   couples: defineTable({
     partner1: v.id("users"),
-    partner2: v.id("users")
+    partner2: v.optional(v.id("users"))
   }),
   categories: defineTable({
     name: v.string(),
@@ -23,5 +23,6 @@ export default defineSchema({
     category: v.id("categories"),
     type: v.string(),
     user: v.id("users"),
+    couple: v.id("couples")
   }),
 });
