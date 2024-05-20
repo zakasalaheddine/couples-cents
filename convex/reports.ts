@@ -4,8 +4,13 @@ import { query } from "./_generated/server";
 export const stats = query({
   args: { coupleId: v.id("couples") },
   handler: async (ctx, args) => {
-    return await ctx.db.query("transactions")
+    const categories = await ctx.db.query("categories")
       .filter(q => q.eq(q.field("couple"), args.coupleId))
       .collect()
+    const transactions = await ctx.db.query("transactions")
+      .filter(q => q.eq(q.field("couple"), args.coupleId))
+      .collect()
+
+    return { categories, transactions }
   }
 })

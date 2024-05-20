@@ -44,12 +44,15 @@ export default function CategoryPicker({ control }: CategoryPickerProps) {
   const {
     field: { onChange, value }
   } = useController({ control, name: 'category' })
-  const categories = useQuery(api.category.getCategoriesList, { coupleId })
+  const categoriesQuery = useQuery(api.category.getCategoriesList, { coupleId })
+  const categories = useMemo(
+    () => categoriesQuery?.filter((item) => item.type === type),
+    [categoriesQuery, type]
+  )
   const selectedCategory = useMemo(() => {
     if (!categories) return
     return categories.find((category) => `${category._id}` === value)
   }, [value, categories])
-  // const [selectedCategory, setSelectedCategory] = useState<SelectedCategory>()
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

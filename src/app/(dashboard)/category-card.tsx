@@ -5,18 +5,20 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import SkeletonWrapper from '@/components/ui/skeleton-wrapper'
 import { Id } from '../../../convex/_generated/dataModel'
 
+export interface CategoryStats {
+  category: {
+    _id: Id<'categories'>
+    name: string
+    icon: string
+  }
+  amount: number
+  percentage: number
+}
+
 interface CategoryCardProps {
   isLoading: boolean
   type: TypeOfTransaction
-  data: {
-    category: {
-      _id: Id<'categories'>
-      name: string
-      icon: string
-    }
-    amount: number
-    percentage: number
-  }[]
+  data: CategoryStats[]
 }
 
 export default function CategoryCard({
