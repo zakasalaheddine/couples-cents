@@ -3,7 +3,7 @@ import { Id } from "../../convex/_generated/dataModel";
 import { groupBy, map, reduce, sumBy } from "lodash";
 import { TypeOfTransaction } from "@/components/shared/transaction-dialog/schema";
 
-interface Transaction {
+export interface Transaction {
   _id: Id<"transactions">;
   _creationTime: number;
   type: string;
@@ -29,14 +29,14 @@ interface StateProps {
   }[]
 }
 
-const filterData = (data: Transaction[], from: Date, to: Date, type?: TypeOfTransaction,) => {
+export const filterData = (data: Transaction[], from: Date, to: Date, type?: TypeOfTransaction,) => {
   return data.filter(tr => {
     if (type) return isAfter(tr.date, from) && isBefore(tr.date, to) && tr.type === type
     return isAfter(tr.date, from) && isBefore(tr.date, to)
   })
 }
 
-const sumTransactions = (data: Transaction[]) => {
+export const sumTransactions = (data: Transaction[]) => {
   return sumBy(data, item => item.amount)
 }
 

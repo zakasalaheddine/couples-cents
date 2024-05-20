@@ -6,6 +6,7 @@ import Greeting from './greeting'
 import { fetchQuery } from 'convex/nextjs'
 import { api } from '../../../convex/_generated/api'
 import Overview from './overview'
+import History from './history'
 
 export default async function Home() {
   const user = await currentUser()
@@ -16,7 +17,7 @@ export default async function Home() {
   const current = await fetchQuery(api.user.current, { userId: user.id })
 
   return (
-    <div className="h-full bg-background">
+    <div className="h-full bg-background pb-10">
       <div className="border-b bg-card">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
           <Greeting />
@@ -52,6 +53,7 @@ export default async function Home() {
         </div>
       </div>
       <Overview coupleId={current?.couple._id!} />
+      <History coupleId={current?.couple._id!} />
     </div>
   )
 }
