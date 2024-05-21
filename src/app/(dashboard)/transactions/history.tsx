@@ -70,7 +70,6 @@ export default function TransactionsHistory({
         </div>
       </div>
       <div className="container">
-        Table
         <TransactionsDataTable
           columns={columns}
           isLoading={isLoading}

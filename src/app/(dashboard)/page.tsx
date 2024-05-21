@@ -1,26 +1,45 @@
 import TransactionDialog from '@/components/shared/transaction-dialog'
 import { Button } from '@/components/ui/button'
-import { currentUser } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
+import { currentUser, clerkClient } from '@clerk/nextjs/server'
+import { RedirectType, redirect } from 'next/navigation'
 import Greeting from './greeting'
 import { fetchQuery } from 'convex/nextjs'
 import { api } from '../../../convex/_generated/api'
 import Overview from './overview'
 import History from './history'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 
 export default async function Home() {
   const user = await currentUser()
   if (!user) {
-    return redirect('/sign-in')
+    try {
+      redirect('/', RedirectType.push)
+    } catch(error) {
+      if (isRedirectError(error)) {
+        throw error
+      } else {
+        console.log('other error')
+      }
+      return
+    }
   }
 
   const current = await fetchQuery(api.user.current, { userId: user.id })
+  let partnerFirstName: string = ''
+  if (current?.partnerUserId) {
+    const partnerUser = await clerkClient.users.getUser(current?.partnerUserId)
+    partnerFirstName = `${partnerUser.firstName}`
+  }
 
   return (
     <div className="h-full bg-background pb-10">
       <div className="border-b bg-card">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
-          <Greeting />
+          <Greeting
+            userId={user.id}
+            firstName={user.firstName!}
+            partnerName={partnerFirstName}
+          />
           <div className="flex items-center gap-3">
             <TransactionDialog
               trigger={

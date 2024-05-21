@@ -1,25 +1,47 @@
-import { clerkClient, currentUser } from '@clerk/nextjs/server'
+'use client'
+import { User } from '@clerk/nextjs/server'
 import { api } from '../../../convex/_generated/api'
-import { redirect } from 'next/navigation'
-import { fetchQuery } from 'convex/nextjs'
+import InviteLink from './invite-link'
+import { Separator } from '@/components/ui/separator'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'convex/react'
+import { Id } from '../../../convex/_generated/dataModel'
+import SkeletonWrapper from '@/components/ui/skeleton-wrapper'
 
-export default async function Greeting() {
-  const user = await currentUser()
-  if (!user) return redirect('/sign-in')
+export default function Greeting({
+  userId,
+  firstName,
+  partnerName
+}: {
+  userId: string
+  firstName: string
+  partnerName?: string
+}) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [partnerId, setPartnerId] = useState<string>()
+  const [coupleId, setCoupleId] = useState<Id<'couples'>>()
+  const currentInfo = useQuery(api.user.current, { userId })
 
-  const current = await fetchQuery(api.user.current, { userId: user.id })
-  if (!current) return redirect('/sign-in')
+  useEffect(() => {
+    setIsLoading(true)
+    if (currentInfo) {
+      setCoupleId(currentInfo.couple._id)
+      setPartnerId(currentInfo.partnerUserId)
+    }
+    setIsLoading(false)
+  }, [currentInfo])
 
-  let partner
-  if (current.partnerUserId) {
-    partner = await clerkClient.users.getUser(current.partnerUserId)
-  }
   return (
-    <div>
-      <p className="text-3xl font-bold">Hello, {user.firstName}! 👋</p>
-      <p className="text-3xl font-bold">
-        {partner ? `Partner with: ${partner.firstName}` : <span>Invite Link</span>}
-      </p>
-    </div>
+    <SkeletonWrapper isLoading={isLoading}>
+      <div className="space-y-2">
+        <p className="text-3xl font-bold">Hello, {firstName}! 👋</p>
+        <Separator />
+        {partnerName ? (
+          <p className="text-3xl font-bold">Partner with: {partnerName}</p>
+        ) : (
+          <InviteLink coupleId={coupleId} userId={userId} />
+        )}
+      </div>
+    </SkeletonWrapper>
   )
 }

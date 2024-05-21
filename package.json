@@ -10,6 +10,7 @@
     "convex": "convex dev"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.1.0",
     "@clerk/nextjs": "^5.0.12",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",

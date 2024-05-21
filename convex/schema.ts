@@ -7,7 +7,7 @@ export default defineSchema({
     email: v.string(),
   }),
   couples: defineTable({
-    partner1: v.id("users"),
+    partner1: v.optional(v.id("users")),
     partner2: v.optional(v.id("users"))
   }),
   categories: defineTable({

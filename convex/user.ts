@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { internalMutation, mutation, query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const getUser = query({
   args: { userId: v.string() },
@@ -31,7 +31,7 @@ export const current = query({
     const partnerId = couple.partner1 === user._id ? couple.partner2 : couple.partner1
     if (partnerId) {
       const partnerUser = await ctx.db.get(partnerId)
-      return { user, couple, partnerUserId: partnerUser?._id }
+      return { user, couple, partnerUserId: partnerUser?.userId }
     }
     return { user, couple, partnerUserId: undefined }
   }
